@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Razor;
 using LibraryManager.Models;
 
 namespace LibraryManager.Controllers
@@ -42,6 +45,77 @@ namespace LibraryManager.Controllers
 
             return View();
         }
+
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return  new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Genre genre = _db.Genres.Find(id);
+            if (genre == null)
+            {
+                return HttpNotFound();
+            } 
+            return View(genre);
+        }
+
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Genre genre = _db.Genres.Find(id);
+            if (genre == null)
+            {
+                return HttpNotFound();
+            }
+            return View(genre);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Genre genre)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Entry(genre).State = EntityState.Modified;
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
+
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Genre genre = _db.Genres.Find(id);
+            if (genre == null)
+            {
+                return HttpNotFound();
+            }
+            return View(genre);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            Genre genre = _db.Genres.Find(id);
+            _db.Genres.Remove(genre);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
 
         protected override void Dispose(bool disposing)
         {

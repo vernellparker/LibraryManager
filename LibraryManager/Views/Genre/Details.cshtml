@@ -1,0 +1,24 @@
+﻿@model LibraryManager.Models.Genre
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+    <h2>Genre Details</h2>
+    <br />
+    <fieldset disabled>
+        <div class="row" style="padding-bottom: 5px; padding-top: 5px">
+            <div class="col-md-12">
+                @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            </div>
+        </div>
+    </fieldset>
+</div>
+<p>
+    @Html.Partial("_BackToListButton")
+    @Html.Partial("_EditButtonPartial",Model.Id)
+</p>
+
